@@ -1,5 +1,5 @@
 {
-  "name": "file-pharser",
+  "name": "file-parser",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
