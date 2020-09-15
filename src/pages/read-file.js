@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
-import {Redirect} from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Toolbar from '../components/Toolbar/Toolbar';
+import FileSelector from '../components/FileSelector/FileSelector'
+
 
 class ReadFilePage extends Component {
     state = {
@@ -7,19 +11,19 @@ class ReadFilePage extends Component {
         fileContent: null,
         fileName: null
     }
-    
-    deleteCommentsHandler =()=>{
+
+    deleteCommentsHandler = () => {
         this.setState({
             redirect: true,
         });
     }
 
-    onChange=(e)=>{
-        let file=e.target.files[0];
-        if(file.name.toString().endsWith('.txt')){
+    onChange = (e) => {
+        let file = e.target.files[0];
+        if (file.name.toString().endsWith('.txt')) {
             let reader = new FileReader();
             reader.readAsText(file);
-            reader.onload=(e)=>{
+            reader.onload = (e) => {
                 this.setState({
                     fileContent: e.target.result,
                     fileName: file.name
@@ -28,47 +32,38 @@ class ReadFilePage extends Component {
                 console.log(this.state.fileContent)
             }
         }
-        else{
+        else {
             alert('File extention does not supported!\nChoose .txt file.')
         }
     }
 
-    isFileLoaded=()=>{
-        if(!this.state.fileName||!this.state.fileContent){
-            return (<input type="file" name="file" onChange={(e)=>this.onChange(e)}/>)
-        }
-        else{
-            return (
-            <div>
-                <button onClick={()=>this.deleteCommentsHandler()}>Delete Comments</button>
-            </div>    
-            )
-        }
-    }
-
-    pageContent=()=>{
-        if(this.state.redirect){
+    pageContent = () => {
+        if (this.state.redirect) {
             return (<Redirect to={{
                 pathname: '/output',
                 state: {
                     fileName: this.state.fileName,
                     fileContent: this.state.fileContent
                 }
-            }}/>)
+            }} />)
         }
-        else{
-            return(
+        else {
+            return (
                 <div>
-                    <h1>Welcom to Remove Comments App</h1>
-                    <h1>Please choose file</h1>
-                    {this.isFileLoaded()}
+                    <Toolbar />
+                    <FileSelector deleteCommentsHandler={this.deleteCommentsHandler}
+                    onChange={this.onChange}
+                    fileContent={this.state.fileContent}
+                    fileName={this.state.fileName}
+                    />
+                    
                 </div>
             )
         }
     }
 
-    render(){
-        return(
+    render() {
+        return (
             <div>
                 {this.pageContent()}
             </div>
